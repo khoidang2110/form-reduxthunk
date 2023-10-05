@@ -31,7 +31,7 @@ class ListComponent extends Component {
               onClick={() => {
                 this.handleGetDetail(user.id);
               }}
-              className="btn btn-info"
+              className="btn btn-warning"
             >
               Edit
             </button>
@@ -47,7 +47,7 @@ class ListComponent extends Component {
       )
       .then((res) => {
         console.log(res);
-        message.success("xoá thành công");
+        message.error("xoá thành công");
         this.props.handleSetUser();
       })
       .catch((err) => {

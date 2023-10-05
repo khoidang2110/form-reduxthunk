@@ -35,6 +35,7 @@ class FormComponent extends Component {
         this.inputRef.current.value = "";
         this.inputRef1.current.value = "";
         this.inputRef2.current.value = "";
+        message.info("thêm thành công");
       })
 
       .catch((err) => {
@@ -55,7 +56,7 @@ class FormComponent extends Component {
         this.props.user.name = "";
         this.props.user.account = "";
         this.props.user.password = "";
-        message.info("cập nhật thành công");
+        message.warning("cập nhật thành công");
       })
 
       .catch((err) => {
