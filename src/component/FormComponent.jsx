@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { setUserAction } from "../redux/action/user";
 import { createRef } from "react";
 import { SET_BUTTON, SET_DATA_FORM } from "../redux/constant/user";
+import { message } from "antd";
 class FormComponent extends Component {
   componentDidMount() {
     this.inputRef.current.focus();
@@ -54,6 +55,7 @@ class FormComponent extends Component {
         this.props.user.name = "";
         this.props.user.account = "";
         this.props.user.password = "";
+        message.info("cập nhật thành công");
       })
 
       .catch((err) => {
