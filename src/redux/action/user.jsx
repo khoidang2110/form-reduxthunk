@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SET_USER } from "../constant/user";
+import { SET_BUTTON, SET_USER } from "../constant/user";
 export let setUserAction = () => {
   return (dispatch) => {
     axios({
@@ -18,3 +18,13 @@ export let setUserAction = () => {
         });
   };
 };
+
+export let setButtonAction = ()=> {
+  return(dispatch) => {
+    let action = {
+      type: SET_BUTTON,
+      payload: showButton,
+    };
+     dispatch(action);
+  }
+}

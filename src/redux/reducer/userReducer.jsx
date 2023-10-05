@@ -1,6 +1,7 @@
-import { SET_DATA_FORM, SET_USER } from "../constant/user"
+import { SET_BUTTON, SET_DATA_FORM, SET_USER } from "../constant/user"
 
 const initialState = {
+  showButton: true,
     users: [],
     user:{
       name:"",
@@ -18,6 +19,11 @@ case SET_USER: {
 }
 case SET_DATA_FORM: {
   state.user = payload;
+  return {...state};
+}
+case SET_BUTTON: {
+  state.showButton ? state.showButton = false : state.showButton = true
+  //state.showButton = false;
   return {...state};
 }
  

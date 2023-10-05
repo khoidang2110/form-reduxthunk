@@ -7,7 +7,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { setUserAction } from "../redux/action/user";
 import { createRef } from "react";
-import { SET_DATA_FORM } from "../redux/constant/user";
+import { SET_BUTTON, SET_DATA_FORM } from "../redux/constant/user";
 class FormComponent extends Component {
   componentDidMount() {
     this.inputRef.current.focus();
@@ -16,13 +16,6 @@ class FormComponent extends Component {
   inputRef1 = createRef();
   inputRef2 = createRef();
 
-  state = {
-    user: {
-      name: "",
-      account: "",
-      password: "",
-    },
-  };
   handleChangeForm = (event) => {
     let { value, name } = event.target;
     let user = { ...this.props.user, [name]: value };
@@ -55,11 +48,12 @@ class FormComponent extends Component {
     })
       .then((res) => {
         console.log(res);
-
+        this.props.handleSetButton();
         this.props.handleSetUser();
-        this.inputRef.current.value = "";
-        this.inputRef1.current.value = "";
-        this.inputRef2.current.value = "";
+
+        this.props.user.name = "";
+        this.props.user.account = "";
+        this.props.user.password = "";
       })
 
       .catch((err) => {
@@ -89,7 +83,7 @@ class FormComponent extends Component {
             <Form.Group as={Col} controlId="formGridAccount">
               <Form.Label>Account</Form.Label>
               <Form.Control
-                ref={this.inputRef2}
+                ref={this.inputRef1}
                 onChange={this.handleChangeForm}
                 value={this.props.user.account}
                 name="account"
@@ -103,7 +97,7 @@ class FormComponent extends Component {
             <Form.Group as={Col} controlId="formGridPassword">
               <Form.Label>Password</Form.Label>
               <Form.Control
-                ref={this.inputRef1}
+                ref={this.inputRef2}
                 onChange={this.handleChangeForm}
                 value={this.props.user.password}
                 name="password"
@@ -114,16 +108,23 @@ class FormComponent extends Component {
               />
             </Form.Group>
           </Row>
-          <Button variant="primary" type="button" onClick={this.handleAddUser}>
-            Add
-          </Button>{" "}
-          <Button
-            variant="warning"
-            type="button"
-            onClick={this.handleUpdateUser}
-          >
-            Update
-          </Button>
+          {this.props.setButton ? (
+            <Button
+              variant="primary"
+              type="button"
+              onClick={this.handleAddUser}
+            >
+              Add
+            </Button>
+          ) : (
+            <Button
+              variant="warning"
+              type="button"
+              onClick={this.handleUpdateUser}
+            >
+              Update
+            </Button>
+          )}
         </Form>
       </div>
     );
@@ -133,6 +134,7 @@ class FormComponent extends Component {
 let mapStateToProps = (state) => {
   return {
     user: state.userReducer.user,
+    setButton: state.userReducer.showButton,
   };
 };
 let mapDispatchToProps = (dispatch) => {
@@ -144,6 +146,12 @@ let mapDispatchToProps = (dispatch) => {
       dispatch({
         type: SET_DATA_FORM,
         payload: user,
+      });
+    },
+    handleSetButton: (showButton) => {
+      dispatch({
+        type: SET_BUTTON,
+        payload: showButton,
       });
     },
   };

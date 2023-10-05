@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { setUserAction } from "../redux/action/user";
 import { message } from "antd";
-import { SET_DATA_FORM } from "../redux/constant/user";
+import { SET_BUTTON, SET_DATA_FORM } from "../redux/constant/user";
 
 class ListComponent extends Component {
   componentDidMount() {
@@ -53,11 +53,7 @@ class ListComponent extends Component {
       .catch((err) => {
         console.log(err);
       });
-    /**
-     * 1. gắn handle delete vào button delete
-     * 2. gọi api với method delete
-     * 3. sau khi delete thành công => dispatch action lấy danh sách user mới nhất
-     */
+
   };
   handleGetDetail = (id) => {
     axios
@@ -65,6 +61,7 @@ class ListComponent extends Component {
       .then((res) => {
         console.log(res.data);
         this.props.handleSetDataForm(res.data);
+        this.props.handleSetButton();
       })
       .catch((err) => {
         console.log(err);
@@ -102,6 +99,12 @@ let mapDispatchToProps = (dispatch) => {
       dispatch({
         type: SET_DATA_FORM,
         payload: user,
+      });
+    },
+    handleSetButton: (showButton) => {
+      dispatch({
+        type: SET_BUTTON,
+        payload: showButton,
       });
     },
   };
