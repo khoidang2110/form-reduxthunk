@@ -12,7 +12,10 @@ import { message } from "antd";
 class FormComponent extends Component {
   componentDidMount() {
     this.inputRef.current.focus();
+    console.log(this.inputRef.current.value)
   }
+  formRef = createRef();
+
   inputRef = createRef();
   inputRef1 = createRef();
   inputRef2 = createRef();
@@ -20,27 +23,47 @@ class FormComponent extends Component {
   handleChangeForm = (event) => {
     let { value, name } = event.target;
     let user = { ...this.props.user, [name]: value };
+   
     this.props.handleSetDataForm(user);
   };
   handleAddUser = () => {
-    axios({
-      url: "https://6302e6ca9eb72a839d755c30.mockapi.io/cyberphone/users",
-      method: "POST",
-      data: this.props.user,
-    })
-      .then((res) => {
-        console.log(res);
+    // điều kiện để tránh trường hợp nhập thông tin rỗng
 
-        this.props.handleSetUser();
-        this.inputRef.current.value = "";
-        this.inputRef1.current.value = "";
-        this.inputRef2.current.value = "";
-        message.info("thêm thành công");
+    let string1 = this.props.user.name.trim();
+    let string2 = this.props.user.account.trim();
+    let string3 = this.props.user.password.trim();
+    let string4 = this.inputRef.current.value.trim();
+    if(string1.length == 0||string2.length==0 || string3.length==0 || string4.length==0){
+      console.log("rỗng")
+      message.warning("vui lòng nhập đầy đủ thông tin!!!")
+      return;
+    }
+   
+      axios({
+        url: "https://6302e6ca9eb72a839d755c30.mockapi.io/cyberphone/users",
+        method: "POST",
+        data: this.props.user,
       })
+        .then((res) => {
+          console.log(res);
 
-      .catch((err) => {
-        console.log(err);
-      });
+          this.props.handleSetUser();
+          
+          this.inputRef.current.value = "";
+          this.inputRef1.current.value = "";
+          this.inputRef2.current.value = "";
+          this.props.user.name = "";
+          this.props.user.account = "";
+          this.props.user.password = "";
+          message.info("thêm thành công");
+        })
+      
+      
+
+        .catch((err) => {
+          console.log(err);
+        });
+   
   };
   handleUpdateUser = () => {
     axios({
@@ -77,7 +100,7 @@ class FormComponent extends Component {
                 value={this.props.user.name}
                 name="name"
                 type="text"
-                className="form-control"
+                className="form-control name"
                 id=""
                 placeholder="Name"
               />
@@ -151,6 +174,7 @@ let mapDispatchToProps = (dispatch) => {
         payload: user,
       });
     },
+    // tắt mở nút Update
     handleSetButton: (showButton) => {
       dispatch({
         type: SET_BUTTON,
